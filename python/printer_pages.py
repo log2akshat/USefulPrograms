@@ -6,11 +6,8 @@
 import itertools
 
 first_page_number=int(input("Enter First Page Number: "))
-print(first_page_number)
 second_page_number=int(input("Enter Second Page Number: "))
-print(second_page_number)
 last_page_number=int(input("Enter Last Page Number: "))
-print(last_page_number)
 
 INC_VALUE=4
 

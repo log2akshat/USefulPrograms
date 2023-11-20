@@ -1,6 +1,8 @@
 package com.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,14 +20,18 @@ public class UserController {
 	@Autowired
 	UserRegisterService service;
 
-	@PostMapping("/register")
-	public String createUserAccount(@RequestBody UserRegisterRequest request) {
-		return service.createUserAccount(request);
-	}
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/hello")
 	public String sayHello() {
 		return "Welcome to security";
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<String> createUserAccount(@RequestBody UserRegisterRequest request) {
+		request.setPassword(passwordEncoder.encode(request.getPassword()));
+		return ResponseEntity.ok(service.createUserAccount(request));
 	}
 
 	@PostMapping("/login")

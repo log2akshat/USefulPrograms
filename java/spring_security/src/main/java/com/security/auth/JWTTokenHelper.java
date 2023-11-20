@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -29,19 +30,18 @@ public class JWTTokenHelper {
 
 	// Retrieve username from JWT Token
 	public String getUsername(String token) {
-		String username = Jwts.parser()
+		Claims claim = (Claims) Jwts.parser()
 				.setSigningKey(secretKey)
-				.parseClaimsJws(token)
-				.getBody()
-				.getId();
-		return username;
+				.parse(token)
+				.getBody();
+		return claim.getId();
 	}
 
 	// Check if token is expired
 	private boolean isTokenExpired(String token) {
 		final Date expirationTime = Jwts.parser()
 				.setSigningKey(secretKey)
-				.parseClaimsJwt(token)
+				.parseClaimsJws(token)
 				.getBody()
 				.getExpiration();
 		return expirationTime.before(new Date());

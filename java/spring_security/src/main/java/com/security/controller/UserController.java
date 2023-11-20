@@ -49,7 +49,7 @@ public class UserController {
 	public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
 		performAuthentication(request.getEmail(), request.getPassword());
 		String token = jwtTokenHelper.generateToken(request.getEmail());
-		return ResponseEntity.ok(new UserLoginResponse(token, request.getEmail()));
+		return ResponseEntity.ok(new UserLoginResponse(request.getEmail(), token));
 	}
 
 	private void performAuthentication(String email, String password) {

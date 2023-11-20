@@ -22,7 +22,7 @@ public class JSONWebTokenHelper {
 	@Value("${token.issuer}")
 	String tokenIssuer;
 
-	// JWT TOken Generation
+	// JWT Token Generation
 	public String generateToken() {
 		String token;
 		token = Jwts.builder()

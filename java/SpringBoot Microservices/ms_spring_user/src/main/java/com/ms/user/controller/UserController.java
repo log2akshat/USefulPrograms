@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.user.request.PaymentRequest;
 import com.ms.user.request.UserRegisterRequest;
+import com.ms.user.response.OrderRegisterResponse;
 import com.ms.user.response.UserRegisterResponse;
 import com.ms.user.service.UserService;
 
@@ -31,5 +33,17 @@ public class UserController {
 			return new ResponseEntity<UserRegisterResponse>(response, HttpStatus.OK);
 		}
 		return new ResponseEntity<UserRegisterResponse>(response, HttpStatus.NOT_FOUND);
+	}
+
+	// Consuming Payment Microservice using Feign Client
+	@PostMapping("/make")
+	public Integer makePayment(@RequestBody PaymentRequest request) {
+		return service.makePayment(request);
+	}
+
+	// Consuming Order Microservice using Feign Client
+	@GetMapping("/orderid/{orderId}")
+	public ResponseEntity<OrderRegisterResponse> getOrderServiceUser(@PathVariable String orderId) {
+		return service.getOrderServiceUser(orderId);
 	}
 }

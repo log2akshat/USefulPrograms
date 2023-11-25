@@ -3,11 +3,16 @@ package com.ms.user.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ms.user.consume.feign.OrderMicroserviceFeignClient;
+import com.ms.user.consume.feign.PaymentMicroserviceFeignClient;
 import com.ms.user.entity.UserRegisterEntity;
 import com.ms.user.repository.UserRepository;
+import com.ms.user.request.PaymentRequest;
 import com.ms.user.request.UserRegisterRequest;
+import com.ms.user.response.OrderRegisterResponse;
 import com.ms.user.response.UserRegisterResponse;
 
 @Service
@@ -15,6 +20,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository repository;
+
+	@Autowired
+	PaymentMicroserviceFeignClient paymentClient;
+
+	@Autowired
+	OrderMicroserviceFeignClient orderClient;
 
 	@Override
 	public String registerUser(UserRegisterRequest request) {
@@ -43,6 +54,16 @@ public class UserServiceImpl implements UserService {
 					.build();
 		}
 		return userResponse;
+	}
+
+	@Override
+	public Integer makePayment(PaymentRequest request) {
+		return paymentClient.makePayment(request);
+	}
+
+	@Override
+	public ResponseEntity<OrderRegisterResponse> getOrderServiceUser(String orderId) {
+		return orderClient.getUser(orderId);
 	}
 
 }

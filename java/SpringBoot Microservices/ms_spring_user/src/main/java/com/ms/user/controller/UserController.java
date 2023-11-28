@@ -15,6 +15,8 @@ import com.ms.user.response.OrderRegisterResponse;
 import com.ms.user.response.UserRegisterResponse;
 import com.ms.user.service.UserService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 public class UserController {
 
@@ -37,13 +39,19 @@ public class UserController {
 
 	// Consuming Payment Microservice using Feign Client
 	@PostMapping("/make")
-	public Integer makePayment(@RequestBody PaymentRequest request) {
-		return service.makePayment(request);
+	@CircuitBreaker(name="payment-service", fallbackMethod = "makePayment")
+	public String makePayment(@RequestBody PaymentRequest request) {
+		return "Generated ID: " + service.makePayment(request);
 	}
 
 	// Consuming Order Microservice using Feign Client
 	@GetMapping("/orderid/{orderId}")
 	public ResponseEntity<OrderRegisterResponse> getOrderServiceUser(@PathVariable String orderId) {
 		return service.getOrderServiceUser(orderId);
+	}
+
+	// Circuit Breaker Fault Tolerance method
+	public String makePayment(Throwable exp) {
+		return "There is issue with Payment Gateway, Please try again later..";
 	}
 }

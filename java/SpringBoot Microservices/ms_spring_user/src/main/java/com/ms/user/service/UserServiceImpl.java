@@ -2,12 +2,15 @@ package com.ms.user.service;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ms.user.consume.feign.OrderMicroserviceFeignClient;
 import com.ms.user.consume.feign.PaymentMicroserviceFeignClient;
+import com.ms.user.controller.UserController;
 import com.ms.user.entity.UserRegisterEntity;
 import com.ms.user.repository.UserRepository;
 import com.ms.user.request.PaymentRequest;
@@ -17,6 +20,8 @@ import com.ms.user.response.UserRegisterResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+	Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
 	UserRepository repository;
@@ -37,6 +42,7 @@ public class UserServiceImpl implements UserService {
 				.city(request.getCity())
 				.build();
 		repository.save(entity);
+		logger.info("User details added successfully.");
 		return "User details added successfully..";
 	}
 
@@ -53,16 +59,19 @@ public class UserServiceImpl implements UserService {
 					.city(entityResponse.getCity())
 					.build();
 		}
+		logger.info("Got the user response from repository: " + userResponse);
 		return userResponse;
 	}
 
 	@Override
 	public Integer makePayment(PaymentRequest request) {
+		logger.info("Connecting to payment-service for making the payment.");
 		return paymentClient.makePayment(request);
 	}
 
 	@Override
 	public ResponseEntity<OrderRegisterResponse> getOrderServiceUser(String orderId) {
+		logger.info("Connecting to order-service for getting the user details of the provided orderId: " + orderId);
 		return orderClient.getUser(orderId);
 	}
 

@@ -3,7 +3,7 @@ package observer_pattern;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YoutubeChannel implements Portal {
+public class YoutubeChannel implements Subject {
 	public static List<Observer> subscriberList = new ArrayList<>();
 
 	@Override

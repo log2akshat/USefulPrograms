@@ -8,7 +8,7 @@ import java.util.Optional;
 public class Demo {
 
 	public static void main(String[] args) {
-		Portal portal = new YoutubeChannel();
+		Subject portal = new YoutubeChannel();
 
 		Observer observer1 = new Subscriber("Akshat");
 		portal.subscribe(observer1);

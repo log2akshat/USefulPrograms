@@ -1,0 +1,34 @@
+<!-- order.component.html -->
+<div class="container">
+    <br>
+    <h2>Welcome to the Online Ordering Application!</h2>
+    <p>Order Products Online</p>
+    <br>
+    <div class="card">
+        <form (ngSubmit)="submitForm()">
+            <mat-form-field class="input-text" appearance="outline">
+                <mat-label>Customer Name</mat-label>
+                <input name="customerName"[(ngModel)]="data.customerName" matInput placeholder="Customer Name">
+            </mat-form-field>
+            <mat-form-field class="input-text" appearance="outline">
+                <mat-label>Product Name</mat-label>
+                <input name="productName" [(ngModel)]="data.productName" matInput placeholder="Product Name">
+            </mat-form-field>
+            <mat-form-field class="input-text" appearance="outline">
+                <mat-label>Store Name</mat-label>
+                <input name="storeName" [(ngModel)]="data.storeName" matInput placeholder="Store Name">
+            </mat-form-field>
+            <mat-form-field class="input-text" appearance="outline">
+                <mat-label>City</mat-label>
+                <input name="city" [(ngModel)]="data.city" matInput placeholder="City">
+            </mat-form-field>
+
+            <mat-spinner *ngIf="flag" style="margin: auto;"></mat-spinner>
+            <div class="text-center">
+                <button [disabled]="flag" type="submit" mat-raised-button color="primary">Order</button>
+                <button type="reset" mat-raised-button color="accent">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+

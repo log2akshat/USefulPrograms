@@ -1,0 +1,19 @@
+
+.container {
+    text-align: center;
+}
+
+.card {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    background-color: #FFF;
+}
+
+.card .input-text {
+    width: 100%;
+}
+
+.card button {
+    margin: 7px;
+}

@@ -55,6 +55,13 @@ export class OrderComponent {
       if (response.status === 200 || response.status === 201) {
         this.flag = false;
         this.snack.open('Order placed successfully', 'Done');
+        // Reset the form data
+        this.data = {
+          customerName: '',
+          productName: '',
+          storeName: '',
+          city: ''
+        };
       } else {
         // Handle other status codes as needed
         this.flag = false;

@@ -3,6 +3,8 @@ package main
 import (
 	userInput "booking-app/helper"
 	"fmt"
+	"sync"
+	"time"
 )
 
 /** Global level variables
@@ -43,6 +45,7 @@ type UserData struct {
 }
 
 var bookings = make([]UserData, 0) // List of Struct
+var wg = sync.WaitGroup{}
 
 func main() {
 	/**
@@ -67,6 +70,44 @@ func main() {
 			// Book Tickets
 			bookTickets(firstName, lastName, userTickets, email)
 
+			/**
+			* Goroutines
+			* ----------
+			* Uses Green Thread Model as Java had support for Solaris
+			* It's an abstraction of an actualThread, Used for concurrent programming.
+			* They are lightweight, independently executing functions that run concurrently
+			* with other goroutines in the same address space.
+			*
+			* go: Keyword to start a new goroutine
+			*     It is a lightweight thread managed by the go runtime.
+			*
+			* Channels: Channels are used for communication and synchronization between goroutines.
+			*           Channels provide a safe way for goroutines to communicate by passing messages.
+			*           The `chan`` keyword is used to create a channel.
+			*           Example: ch := make(chan int)
+			*           Goroutines can send and receive data through channels, allowing for
+			*           coordinated and synchronized execution.
+			*
+			 */
+
+			/**
+			* Usecase: Send the tickets to user through e-mail using goroutine to achieve concurrency
+			* Problem: By default main goroutine (main thread) doesn't wait for other goroutines
+			*          main goroutine exits before emailTicket() had time to start & execute the code
+			* Solution: Waitgroup
+			*           - Using Waitgroup, waits for the launched goroutine to finish
+			*           - Package `sync` provides the basic 3 functionalities
+			*             1. Add(): Sets the number of goroutines to wait for
+			*                       It increase the counter by the provided number
+			*             2. Wait(): Blocks until the Waitgroup counter is 0
+			*             3. Done(): Decrements the Waitgroup counter by 1
+			*                        So, this is called by the goroutine to indicate that it's finished
+			*
+			*
+			 */
+			wg.Add(1)
+			go emailTicket(userTickets, firstName, lastName, email)
+
 			// Creating list of only first names
 			fmt.Printf("\nThe first name of users who have booked the tickets: %v\n", getFirstNames())
 
@@ -89,6 +130,7 @@ func main() {
 			}
 		}
 	}
+	wg.Wait()
 }
 
 func greetUsers(sponsorName string) {
@@ -223,4 +265,17 @@ func getFirstNames() []string {
 		firstNames = append(firstNames, element.firstName)
 	}
 	return firstNames
+}
+
+func emailTicket(userTickets uint, firstName string, lastName string, email string) {
+	/** Sleep function
+	* Stops/Blocks the current thread (goroutine) execution for the defined duration
+	 */
+	time.Sleep(50 * time.Second)
+	// Sprintf => Stores the formatted string in a variable
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("************************************************************")
+	fmt.Printf("E-mailing ticket:\n%v\nto e-mail address %v\n", ticket, email)
+	fmt.Println("************************************************************")
+	wg.Done()
 }

@@ -63,41 +63,85 @@ func main() {
 		fmt.Println("Enter the number of tickets you want")
 		fmt.Scan(&userTickets)
 
-		remainingTickets = remainingTickets - uint(userTickets)
-		// bookings[0] = firstName + " " + lastName
-		// bookings[51] = firstName + " " + lastName // index 51 out of bounds
-		bookings = append(bookings, firstName+" "+lastName)
+		isValidName := len(firstName) > 2 && len(lastName) > 2
+		isValidEmail := strings.Contains(email, "@")
+		isValidTicketCount := userTickets <= remainingTickets
 
-		//fmt.Printf("The whole Array/Slice: %v\n", bookings)
-		//fmt.Printf("The first value of Array/Slice: %v\n", bookings[0])
-		//fmt.Printf("The Array/Slice Type: %T\n", bookings)
-		//fmt.Printf("The Array/Slice length: %v\n", len(bookings))
+		if isValidName && isValidEmail && isValidTicketCount {
+			remainingTickets = remainingTickets - uint(userTickets)
+			// bookings[0] = firstName + " " + lastName
+			// bookings[51] = firstName + " " + lastName // index 51 out of bounds
+			bookings = append(bookings, firstName+" "+lastName)
 
-		fmt.Println("--------------------------------------------")
-		fmt.Printf("Thank you %v %v for booking %v tickets\nYou will recieve confirmation message on %v\n", firstName, lastName, userTickets, email)
-		fmt.Printf("Now, only %d are left for the %v\n", remainingTickets, conferenceName)
+			//fmt.Printf("The whole Array/Slice: %v\n", bookings)
+			//fmt.Printf("The first value of Array/Slice: %v\n", bookings[0])
+			//fmt.Printf("The Array/Slice Type: %T\n", bookings)
+			//fmt.Printf("The Array/Slice length: %v\n", len(bookings))
 
-		// Creating list of only first names
-		firstNames := []string{}
+			fmt.Println("--------------------------------------------")
+			fmt.Printf("Thank you %v %v for booking %v tickets\nYou will recieve confirmation message on %v\n", firstName, lastName, userTickets, email)
+			fmt.Printf("Now, only %d tickets are left for the %v\n", remainingTickets, conferenceName)
 
-		/**
-		* for each loop
-		* for index, element := range bookings { logic for defining for loop }
-		* index 	- index of the elememts
-		* element 	- element of the Array/Slice
-		* range 	- allows us to iterate over elements for different data structures (not only Arrays/Slices)
-		* 			  For Arrays/Slices, range provides the index and value for each element
-		* Fields 	- This function comes from string package, which splits the string eith whitespace as separator
-		*          	  Returns the slice with the split elements
-		* _ 	 	- Blank Identifier used to ignore a variable we don't want to use.
-					  Instead of using index we are using _
-		*/
-		for _, element := range bookings {
-			var name = strings.Fields(element)
-			firstNames = append(firstNames, name[0])
+			// Creating list of only first names
+			firstNames := []string{}
+
+			/**
+			* for each loop
+			* for index, element := range bookings { logic for defining for loop }
+			* index 	- index of the elememts
+			* element 	- element of the Array/Slice
+			* range 	- allows us to iterate over elements for different data structures (not only Arrays/Slices)
+			* 			  For Arrays/Slices, range provides the index and value for each element
+			* Fields 	- This function comes from string package, which splits the string eith whitespace as separator
+			*          	  Returns the slice with the split elements
+			* _ 	 	- Blank Identifier used to ignore a variable we don't want to use.
+			Instead of using index we are using _
+			*/
+			for _, element := range bookings {
+				var name = strings.Fields(element)
+				firstNames = append(firstNames, name[0])
+			}
+			fmt.Printf("\nThe first name who have booked the tickets: %v\n", firstNames)
+
+			// End the program if all tickets are booked
+			allTicketsSoldOut := remainingTickets == 0
+			if allTicketsSoldOut {
+				fmt.Printf("All the tickets of %v are booked..\n", conferenceName)
+				break
+			}
+			// User Input Validations
+		} else {
+			if !isValidName {
+				fmt.Println("You have entered wrong first name or last name")
+			}
+			if !isValidEmail {
+				fmt.Println("You have eneterd wrong e-mail ID")
+			}
+			if !isValidTicketCount {
+				fmt.Printf("We have only %d tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
+				//continue // use on reversing the if...else condition
+			}
 		}
-		fmt.Printf("\nThe first name who have booked the tickets: %v\n", firstNames)
+	}
 
+	/** Sample code for switch statement
+	*
+	* switch - Allows variable to be tested for equality against a list of values
+	* default - Hand;es the case, if no match is found
+	*
+	 */
+	city := "Pune"
+	switch city {
+	case "Mumbai":
+		// Execute code to book the tickets for Mumbai Go Conference
+	case "Prizren", "Pristina":
+		// Execute code to book the tickets for Mumbai Go Conference
+	case "Taipei", "Hsinchu":
+		// Execute code to book the tickets for Mumbai Go Conference
+	case "Pune":
+		// Execute code to book the tickets for Mumbai Go Conference
+	default:
+		fmt.Println("No valid city selected!")
 	}
 
 }

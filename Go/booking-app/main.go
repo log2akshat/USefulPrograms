@@ -1,9 +1,16 @@
 package main
 
 import (
+	userInput "booking-app/helper"
 	"fmt"
 	"strings"
 )
+
+/** Global level variables
+* Capatalize the first leeter of the variables
+* so that it can be used in other packages globally who imports them
+ */
+// var RemainingTickets uint = 50 // untyped int, can't be negative
 
 /**
 * Package level variables
@@ -13,8 +20,8 @@ import (
 const totalConferenceTickets = 50
 
 var conferenceName = "Go Conference"
-var remainingTickets uint = 50 // untyped int, can't be negative
 var bookings = []string{}
+var remainingTickets uint = 50 // untyped int, can't be negative
 
 func main() {
 	/**
@@ -30,17 +37,17 @@ func main() {
 	for {
 		// Get user input from getUserInput() function
 		// Declaring and assigning the values into variables what we got from getUserInput() function
-		firstName, lastName, email, userTickets := getUserInput()
+		firstName, lastName, email, userTickets := userInput.GetUserInput()
 
 		// Validate the user Input
-		isValidName, isValidEmail, isValidTicketCount := validateUserInput(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketCount := userInput.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketCount {
 			// Book Tickets
 			bookTickets(firstName, lastName, userTickets, email)
 
 			// Creating list of only first names
-			fmt.Printf("\nThe first name who have booked the tickets: %v\n", getFirstNames())
+			fmt.Printf("\nThe first name of users who have booked the tickets: %v\n", getFirstNames())
 
 			// End the program if all tickets are booked
 			if remainingTickets == 0 {
@@ -50,7 +57,7 @@ func main() {
 		} else {
 			// User Input Validations
 			if !isValidName {
-				fmt.Println("You have entered wrong first name or last name")
+				fmt.Println("You have entered first name or last name too short")
 			}
 			if !isValidEmail {
 				fmt.Println("You have eneterd wrong e-mail ID")
@@ -71,61 +78,6 @@ func greetUsers(sponsorName string) {
 	// %T gives the type of the variables and constants
 	fmt.Printf("conferenceName is %T, totalConferenceTickets is %T and remainingTickets is %T\n", conferenceName, totalConferenceTickets, remainingTickets)
 
-}
-
-func getUserInput() (string, string, string, uint) {
-	/**
-	* Local Variables
-	* ---------------
-	* Defined inside a function or a block, can be accessed only inside that function or block
-	* When we do not assign the value imediately Go do not know the value we are going to store
-	* So it ask to define the type explictly
-	 */
-	var firstName string
-	var lastName string
-	var email string
-	var userTickets uint
-
-	/**
-	* User Input from CLI
-	* -------------------
-	* Asks user for their name, from CLI and assign it to variable userName
-	*
-	* Pointers
-	* --------
-	* & => called pointer, which is a special variable in Go that points to memory
-	* address of another variable. So, a pointer needs to be prefixed before userName
-	* otherwise it will simply exist without taking input from CLI.
-	* Example:
-	* fmt.Println(&remainingTickets) => Gives the Memory Address
-	*
-	* Now, scan() function can assign the user's value to the userName variable
-	* Because it has pointer to its memory address
-	 */
-
-	fmt.Println()
-	fmt.Println("Enter your First Name")
-	fmt.Scan(&firstName)
-
-	fmt.Println("Enter your Last Name")
-	fmt.Scan(&lastName)
-
-	fmt.Println("Enter your Email Id")
-	fmt.Scan(&email)
-
-	fmt.Println("Enter the number of tickets you want")
-	fmt.Scan(&userTickets)
-
-	// A Go function can return multiple values
-	return firstName, lastName, email, userTickets
-}
-
-func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) > 2 && len(lastName) > 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketCount := userTickets <= remainingTickets
-
-	return isValidName, isValidEmail, isValidTicketCount
 }
 
 func bookTickets(firstName string, lastName string, userTickets uint, email string) {

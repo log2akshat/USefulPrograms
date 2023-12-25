@@ -3,7 +3,7 @@ package main
 import (
 	userInput "booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 /** Global level variables
@@ -20,8 +20,14 @@ import (
 const totalConferenceTickets = 50
 
 var conferenceName = "Go Conference"
-var bookings = []string{}
 var remainingTickets uint = 50 // untyped int, can't be negative
+// var bookings = []string{} // Uncomment if want to use Slice instead of Map
+/**
+* List of Maps defined as bookings
+* It is an alternative way to create slice
+* We need to define the initial size of the slice and it can grow dynamically
+ */
+var bookings = make([]map[string]string, 0) // List of Maps
 
 func main() {
 	/**
@@ -81,6 +87,32 @@ func greetUsers(sponsorName string) {
 }
 
 func bookTickets(firstName string, lastName string, userTickets uint, email string) {
+
+	remainingTickets = remainingTickets - uint(userTickets)
+
+	/**
+	* Maps
+	* ----
+	* Built-in data structure that provides an unordered collection of key-value pairs.
+	* It is similar to dictionaries or associative arrays in other programming languages.
+	* Maps are used to store and retrieve values based on a unique key.
+	*
+	* Maps must be initialized before use. You can use the `make`` function to create a new map.
+	* GoLang maps are dynamic in size, and their keys must be of a type that supports equality
+	* comparisons (e.g., integers, strings, structs with comparable fields).
+	* Maps provide an efficient way to perform lookups and updates based on keys.
+	*
+	* Also, we cannot mix datatypes in Map
+	 */
+
+	// Create a map for a user
+	var userData = make(map[string]string) // make initializes the map
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	// Convert tickets to string as GoLang map cannot have mix datatypes
+	userData["ticketsBooked"] = strconv.FormatUint(uint64(userTickets), 10)
+
 	/**
 	* Arrays and Slices
 	* -----------------
@@ -92,20 +124,31 @@ func bookTickets(firstName string, lastName string, userTickets uint, email stri
 	* var bookings []string
 	* Declaring an empty Slice, Example => bookings := []string{}
 	*
+	* bookings[0] = firstName + " " + lastName
+	* bookings[51] = firstName + " " + lastName // index 51 out of bounds
 	 */
-	remainingTickets = remainingTickets - uint(userTickets)
-	// bookings[0] = firstName + " " + lastName
-	// bookings[51] = firstName + " " + lastName // index 51 out of bounds
-	bookings = append(bookings, firstName+" "+lastName)
 
+	bookings = append(bookings, userData)
 	//fmt.Printf("The whole Array/Slice: %v\n", bookings)
 	//fmt.Printf("The first value of Array/Slice: %v\n", bookings[0])
 	//fmt.Printf("The Array/Slice Type: %T\n", bookings)
 	//fmt.Printf("The Array/Slice length: %v\n", len(bookings))
 
-	fmt.Println("--------------------------------------------")
 	fmt.Printf("Thank you %v %v for booking %v tickets\nYou will recieve confirmation message on %v\n", firstName, lastName, userTickets, email)
+	fmt.Println("\n-------------------- GO Conference Ticket Booking System --------------------")
+	fmt.Printf("List of all bookings:\n")
+	// Iterating over the Map
+	for key, value := range bookings {
+		fmt.Printf("User %v:\n", key)
+		for userDetailsKey, userDetailsValue := range value {
+			fmt.Println("  * ", userDetailsKey, ":", userDetailsValue)
+		}
+
+	}
+
+	fmt.Println()
 	fmt.Printf("Now, only %d tickets are left for the %v\n", remainingTickets, conferenceName)
+	fmt.Println("-------------------- GO Conference Ticket Booking System --------------------")
 
 }
 
@@ -124,8 +167,9 @@ func getFirstNames() []string {
 	Instead of using index we are using _
 	*/
 	for _, element := range bookings {
-		var name = strings.Fields(element)
-		firstNames = append(firstNames, name[0])
+		// var name = strings.Fields(element)
+		// firstNames = append(firstNames, name[0]) // Uncomment if using Slice
+		firstNames = append(firstNames, element["firstName"])
 	}
 	return firstNames
 }

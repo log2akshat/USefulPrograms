@@ -3,7 +3,6 @@ package main
 import (
 	userInput "booking-app/helper"
 	"fmt"
-	"strconv"
 )
 
 /** Global level variables
@@ -21,13 +20,29 @@ const totalConferenceTickets = 50
 
 var conferenceName = "Go Conference"
 var remainingTickets uint = 50 // untyped int, can't be negative
-// var bookings = []string{} // Uncomment if want to use Slice instead of Map
+// var bookings = []string{} // Uncomment if you want to use Slice instead of Map
+
 /**
 * List of Maps defined as bookings
 * It is an alternative way to create slice
 * We need to define the initial size of the slice and it can grow dynamically
  */
-var bookings = make([]map[string]string, 0) // List of Maps
+// var bookings = make([]map[string]string, 0) // Uncomment if you want to use maps instead of struct
+
+/**
+* List of Struct defined as bookings
+* It is an alternative way to create map
+* `type` keyword creates a new type
+* Can be compared to Classes in Java
+ */
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
+
+var bookings = make([]UserData, 0) // List of Struct
 
 func main() {
 	/**
@@ -106,12 +121,39 @@ func bookTickets(firstName string, lastName string, userTickets uint, email stri
 	 */
 
 	// Create a map for a user
+	/**
+	* Uncomment if you want to use Map functiality and comment Struct functionality
 	var userData = make(map[string]string) // make initializes the map
 	userData["firstName"] = firstName
 	userData["lastName"] = lastName
 	userData["email"] = email
 	// Convert tickets to string as GoLang map cannot have mix datatypes
 	userData["ticketsBooked"] = strconv.FormatUint(uint64(userTickets), 10)
+	*/
+
+	/**
+	* Struct
+	* ------
+	* struct is a composite data type that groups together variables (fields or members)
+	* under a single name.
+	* Each field in a struct can have a different data type unlike map which can have only
+	* one datatype, and structs are commonly used to represent real-world entities with
+	* multiple attributes.
+	*
+	* Fields: Fields in a struct can have different data types, including other structs.
+	* Initialization: We can initialize a struct using the field names and corresponding values.
+	* Anonymous Structs: We can create anonymous structs on the fly without defining a named type.
+	* Zero Values: If a field is not explicitly initialized, it takes its zero value
+	*              (e.g., 0 for numeric types, "" for strings).
+	* Embedded Structs: We can embed one struct into another to create a composition of structures.
+	*
+	 */
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
 
 	/**
 	* Arrays and Slices
@@ -136,16 +178,24 @@ func bookTickets(firstName string, lastName string, userTickets uint, email stri
 
 	fmt.Printf("Thank you %v %v for booking %v tickets\nYou will recieve confirmation message on %v\n", firstName, lastName, userTickets, email)
 	fmt.Println("\n-------------------- GO Conference Ticket Booking System --------------------")
-	fmt.Printf("List of all bookings:\n")
+	fmt.Printf("List of all bookings:%v\n", bookings)
 	// Iterating over the Map
+	/** Uncomment if you wish to use Map Functionality
 	for key, value := range bookings {
 		fmt.Printf("User %v:\n", key)
 		for userDetailsKey, userDetailsValue := range value {
 			fmt.Println("  * ", userDetailsKey, ":", userDetailsValue)
 		}
-
 	}
+	*/
 
+	// Iterate over the slice and print each user from struct
+	for userId, user := range bookings {
+		fmt.Printf("User %v:\n", userId)
+		fmt.Printf("  * Name: %s %s\n", user.firstName, user.lastName)
+		fmt.Printf("  * Email: %s\n", user.email)
+		fmt.Printf("  * Tickets Booked: %d\n", user.numberOfTickets)
+	}
 	fmt.Println()
 	fmt.Printf("Now, only %d tickets are left for the %v\n", remainingTickets, conferenceName)
 	fmt.Println("-------------------- GO Conference Ticket Booking System --------------------")
@@ -169,7 +219,8 @@ func getFirstNames() []string {
 	for _, element := range bookings {
 		// var name = strings.Fields(element)
 		// firstNames = append(firstNames, name[0]) // Uncomment if using Slice
-		firstNames = append(firstNames, element["firstName"])
+		// firstNames = append(firstNames, element["firstName"]) // Uncomment if using Maps
+		firstNames = append(firstNames, element.firstName)
 	}
 	return firstNames
 }

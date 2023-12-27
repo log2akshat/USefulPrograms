@@ -1,12 +1,17 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 public class EmployeeFactory {
 
+    private static final Map<String, Supplier<Employee>> employeeMap = new HashMap<>();
+
+    static {
+        employeeMap.put("ANGULAR DEVELOPER", AngularDeveloper::new);
+        employeeMap.put("JAVA DEVELOPER", JavaDeveloper::new);
+    }
+
     public static Employee getEmployee(String employeeType) {
-        if (employeeType.trim().equalsIgnoreCase("ANGULAR DEVELOPER")) {
-            return new AngularDeveloper();
-        } else if (employeeType.trim().equalsIgnoreCase("JAVA DEVELOPER")) {
-            return new JavaDeveloper();
-        } else {
-            return null;
-        }
+        return employeeMap.getOrDefault(employeeType.trim().toUpperCase(), () -> null).get();
     }
 }

@@ -19,6 +19,7 @@ The code demonstrates the implementation of the Builder Design Pattern for creat
 - **toString() Method:** Overridden in the User class to provide a meaningful representation of User objects.
 
 ### Class Diagram
+```
 +------------------------------------+
  |              User                  |
  +------------------------------------+
@@ -46,6 +47,7 @@ The code demonstrates the implementation of the Builder Design Pattern for creat
  | + setAge(int): UserBuilder         |
  | + build(): User                    |
  +------------------------------------+
+```
 
 In the class diagram:
 - The User class represents the immutable User object.

@@ -1,13 +1,26 @@
+import java.util.function.Supplier;
+
 public class Client {
     public static void main(String[] args) {
-        Employee employee1 = EmployeeFactory.getEmployee("Angular Developer");
-        int salary1 = employee1.salary();
-        System.out.printf("Salary: %d\n", salary1);
+        // Use of Supplier functional interface
+        Supplier<Employee> angularDeveloperSupplier = () -> EmployeeFactory.getEmployee("Angular Developer");
+        printSalary("Angular Developer", angularDeveloperSupplier);
         
-        Employee employee2 = EmployeeFactory.getEmployee("Java Developer");
-        int salary2 = employee2.salary();
-        System.out.printf("Salary: %d\n", salary2);
+        Supplier<Employee> javaDeveloperSupplier = () -> EmployeeFactory.getEmployee("Java Developer");
+        printSalary("Java Developer", javaDeveloperSupplier);
         
-        Employee employee3 = EmployeeFactory.getEmployee("Android Developer");
+        Supplier<Employee> androidDeveloperSupplier = () -> EmployeeFactory.getEmployee("Android Developer");
+        printSalary("Android Developer", androidDeveloperSupplier);
+    }
+
+    // Method to print the salary
+    private static void printSalary(String employeeType, Supplier<Employee> employeeSupplier) {
+        Employee employee = employeeSupplier.get();
+        if (employee != null) {
+            int salary = employee.salary();
+            System.out.printf("Salary for %s: %d\n", employeeType, salary);
+        } else {
+            System.out.printf("Employee %s does not exist.\n", employeeType);
+        }
     }
 }

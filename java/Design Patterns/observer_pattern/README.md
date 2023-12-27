@@ -54,12 +54,20 @@ The Observer Design Pattern is widely used in Java libraries and frameworks, suc
 |-------------------|<>------|------------------|
 | +subscribe(ob)    |        | +getNotified()   |
 | +unsubscribe(ob)  |        +------------------+
-| +notifyObserver() |
-+-------------------+
-         |
-         | implements
-         |
-         v
+| +notifyObserver() |                 |
++-------------------+		      | implements
+        | 			      |
+        | 			      v
+        |                    +-------------------+
+	|		     |    Subscriber     |
+	|		     |-------------------|
+	|		     | -subscriberName   |
+	| implements	     |-------------------|
+	|		     | +getNotified()    |
+	|		     | +getName()        |
+	|		     +-------------------+
+        |
+        v
 +-------------------+
 |  YoutubeChannel   |
 |-------------------|
@@ -71,19 +79,7 @@ The Observer Design Pattern is widely used in Java libraries and frameworks, suc
 | +subscriberNames()|
 +-------------------+
          |
-         | implements
          |
-         v
-+-------------------+
-|    Subscriber     |
-|-------------------|
-| -subscriberName   |
-|-------------------|
-| +getNotified()    |
-| +getName()        |
-+-------------------+
-         |
-         | extends
          |
          v
 +-------------------+

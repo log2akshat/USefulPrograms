@@ -47,8 +47,8 @@ The concrete observer (In our case, the `Subscriber` class) is a class that impl
 
 The Observer Design Pattern is widely used in Java libraries and frameworks, such as the Java GUI toolkit (Swing) where components can register as observers for changes in other components.
 
-
-### Class Diagram
+## Class Diagram
+```
 +-------------------+        +------------------+
 |     Subject       |        |     Observer     |
 |-------------------|<>------|------------------|
@@ -92,6 +92,7 @@ The Observer Design Pattern is widely used in Java libraries and frameworks, suc
 | +main()           |
 | +readLine(br)     |
 +-------------------+
+```
 
 In this diagram:
 - `Subject` and `Observer` are interfaces representing the subject and observer roles in the Observer pattern.
@@ -101,7 +102,7 @@ In this diagram:
 - `Demo` class contains the `main` method and auxiliary methods for reading input.
 
 
-### Explanation of the code
+## Explanation of the code
 In this example, the Observer pattern is implemented for a simplified YouTube channel subscription system.
 
 #### Components:

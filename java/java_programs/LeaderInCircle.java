@@ -30,7 +30,18 @@ public class LeaderInCircle {
         for(int i =1; i<=n; i++) {
             students.add(i);
         }
-        
+
+        /**
+         * - The findLeader method is a recursive function that simulates the
+         *   process of the teacher walking around the circle and removing students.
+         *   The base case checks if there is only one player left in the circle.
+         *   If so, the method returns.
+         * - The index of the next student to be removed is calculated using the
+         *   formula (index + k) % students.size().
+         * - The student at the calculated index is removed from the list.
+         * - The findLeader method is called recursively with the updated list of
+         *   students, the same value of k, and the updated index.
+         */
         findLeader(students, k-1, 0);
         System.out.println(students.get(0));
     }

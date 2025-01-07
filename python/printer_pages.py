@@ -20,4 +20,5 @@ for a,b in itertools.zip_longest(list1,list2):
     if b:
         new_list.append(b)
 print(new_list)
-print("Total pages required to print are: %s" % len(new_list))
+total_pages=len(new_list)/2
+print("Total pages required to print are: %s" % total_pages)
